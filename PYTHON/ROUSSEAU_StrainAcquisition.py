@@ -8,7 +8,7 @@ import sys
 import time
 
 
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 
 ##############################################################################
@@ -41,8 +41,8 @@ def main():
     ##################################################################
 
     deviceId = 0                        # Set "0" if you use only 1 head.
-    ysize = 10                          # Number of Y lines.
-    timeout_sec = 1                   # Timeout value for the acquiring image
+    ysize = 100                          # Number of Y lines.
+    timeout_sec = 10                   # Timeout value for the acquiring image
     use_external_batchStart = False     # 'True' if you start batch externally.
 
     ethernetConfig = LJXAwrap.LJX8IF_ETHERNET_CONFIG()
@@ -151,12 +151,12 @@ def main():
     print(" Z pitch in micrometer : ", ZUnit.value / 100.0)
     print("----------------------------------------")
 
+
     ##################################################################
     # Display part:
     #
     # <NOTE> Additional modules are required to execute the next block.
     # -'Numpy' for handling array data.
-    # -'Pillow' for 2D image display.
     # -'matplotlib' for profile display.
     #
     # If you want to skip,
@@ -164,6 +164,7 @@ def main():
     #
     ##################################################################
     if True:
+        
         fig = plt.figure(figsize=(4.0, 6.0))
         plt.subplots_adjust(hspace=0.5)
 
@@ -173,7 +174,6 @@ def main():
 
         x_val_mm = [0.0] * xsize
         z_val_mm = [0.0] * xsize
-        prof_1 = [0.0] * xsize
         for i in range(xsize):
             # Conver X data to the actual length in millimeters
             x_val_mm[i] = (profinfo.lXStart + profinfo.lXPitch * i)/100.0  # um
@@ -181,22 +181,22 @@ def main():
 
             # Conver Z data to the actual length in millimeters
             if z_val[sl + i] == 0:  # invalid value
-                z_val_mm[i] = numpy.nan
+                z_val_mm[i] = np.nan
             else:
                 # 'Simple array data' is offset to be unsigned 16-bit data.
                 # Decode by subtracting 32768 to get a signed value.
                 z_val_mm[i] = int(z_val[sl + i]) - 32768  # decode
                 z_val_mm[i] *= ZUnit.value / 100.0  # um
                 z_val_mm[i] /= 1000.0  # mm
-
-        plotz_min = numpy.nanmin(z_val_mm)
-        if numpy.isnan(plotz_min):
+            
+        plotz_min = np.nanmin(z_val_mm)
+        if np.isnan(plotz_min):
             plotz_min = -1.0
         else:
             plotz_min -= 1.0
-
-        plotz_max = numpy.nanmax(z_val_mm)
-        if numpy.isnan(plotz_max):
+            
+        plotz_max = np.nanmax(z_val_mm)
+        if np.isnan(plotz_max):
             plotz_max = 1.0
         else:
             plotz_max += 1.0
@@ -206,15 +206,56 @@ def main():
         ax3.plot(x_val_mm, z_val_mm)
 
         plt.title("Height Profile 1")
+        
+        # Create total Z array in mm (represents every line)
+        zsize = len(z_val)
+        z_val_tot_mm = [0.0] * zsize
+        for i in range(zsize):
+            # Conver Z data to the actual length in millimeters
+            if z_val[i] == 0:  # invalid value
+                z_val_tot_mm[i] = -25
+            else:
+                # 'Simple array data' is offset to be unsigned 16-bit data.
+                # Decode by subtracting 32768 to get a signed value.
+                z_val_tot_mm[i] = int(z_val[i]) - 32768  # decode
+                z_val_tot_mm[i] *= ZUnit.value / 100.0  # um
+                z_val_tot_mm[i] /= 1000.0  # mm
+        
+        # Find the max z in every line taken
+        max_values = []
+        indices1 = []
+        indices2 = []
+        lengths = []
+        
+        for i in range(0, zsize, xsize): 
+            chunk = z_val_tot_mm[i:i+xsize]
+            max_value1 = max(chunk[0:int(xsize/2)]) 
+            max_value2 = max(chunk[int(xsize/2):xsize])
+            index1 = chunk.index(max_value1)
+            index2 = chunk.index(max_value2)
+            max_values.append(max_value1) 
+            indices1.append(index1)
+            indices2.append(index2)
+            length = x_val_mm[index2]-x_val_mm[index1]
+            lengths.append(length)
+            
+        print(max_values)
+        print(indices1)
+        print(indices2)
+        print(lengths)
+        
+        # Find the two max Z values on either side of the center
+
+
 
         # Show all plot
         print("\nPress 'q' key to exit the program...")
         plt.show()
         plt.close('all')
+        
 
     print("\nTerminated normally.")
     return
-
 
 
 ###############################################################################
@@ -250,7 +291,3 @@ def callback_s_a(p_header,
 if __name__ == '__main__':
     main()
 
-###############################################################################
-# Acquire profiles 1 and 2
-prof_1 = z_val[0:3200]
-###############################################################################
