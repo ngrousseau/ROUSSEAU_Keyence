@@ -11,13 +11,18 @@ import os.path
 dll_name = "LJX8_IF.dll"        # For Windows
 # dll_name = "libljxacom.so"    # For Linux
 
-dllabspath = os.path.dirname(os.path.abspath(__file__))+os.path.sep+dll_name
+###################################################################
+# Define the file path of the dll or so file and load the library.
+###################################################################
+dllabspath = os.path.dirname(__file__)+os.path.sep+dll_name
 mdll = cdll.LoadLibrary(dllabspath)
 
 
-#########################################################
+#############################################################################
 # Structure
-#########################################################
+# Define the attributes of the classes or structs to allow for communication
+# between Python and C.
+#############################################################################
 class LJX8IF_ETHERNET_CONFIG(ctypes.Structure):
     _fields_ = [
         ("abyIpAddress", ctypes.c_ubyte * 4),
@@ -140,6 +145,7 @@ LJX8IF_CALLBACK = ctypes.CFUNCTYPE(
     )
 
 # LJX8IF_EthernetOpen
+# Establishes an Ethernet connection
 LJX8IF_EthernetOpen = mdll.LJX8IF_EthernetOpen
 LJX8IF_EthernetOpen.restype = ctypes.c_int
 LJX8IF_EthernetOpen.argtypes = [
@@ -148,6 +154,7 @@ LJX8IF_EthernetOpen.argtypes = [
     ]
 
 # LJX8IF_CommunicationClose
+# Disconnects the connection
 LJX8IF_CommunicationClose = mdll.LJX8IF_CommunicationClose
 LJX8IF_CommunicationClose.restype = ctypes.c_int
 LJX8IF_CommunicationClose.argtypes = [
@@ -155,6 +162,7 @@ LJX8IF_CommunicationClose.argtypes = [
     ]
 
 # LJX8IF_RebootController
+# Reboots the controller
 LJX8IF_RebootController = mdll.LJX8IF_RebootController
 LJX8IF_RebootController.restype = ctypes.c_int
 LJX8IF_RebootController.argtypes = [
@@ -162,6 +170,7 @@ LJX8IF_RebootController.argtypes = [
     ]
 
 # LJX8IF_ReturnToFactorySetting
+# Returns the controller to the factory settings
 LJX8IF_ReturnToFactorySetting = mdll.LJX8IF_ReturnToFactorySetting
 LJX8IF_ReturnToFactorySetting.restype = ctypes.c_int
 LJX8IF_ReturnToFactorySetting.argtypes = [
@@ -169,6 +178,7 @@ LJX8IF_ReturnToFactorySetting.argtypes = [
     ]
 
 # LJX8IF_ControlLaser
+# Controls the laser
 LJX8IF_ControlLaser = mdll.LJX8IF_ControlLaser
 LJX8IF_ControlLaser.restype = ctypes.c_int
 LJX8IF_ControlLaser.argtypes = [
@@ -177,6 +187,7 @@ LJX8IF_ControlLaser.argtypes = [
     ]
 
 # LJX8IF_GetError
+# Gets the controller system error information
 LJX8IF_GetError = mdll.LJX8IF_GetError
 LJX8IF_GetError.restype = ctypes.c_int
 LJX8IF_GetError.argtypes = [
@@ -187,6 +198,7 @@ LJX8IF_GetError.argtypes = [
     ]
 
 # LJX8IF_ClearError
+# Clears the controller system error
 LJX8IF_ClearError = mdll.LJX8IF_ClearError
 LJX8IF_ClearError.restype = ctypes.c_int
 LJX8IF_ClearError.argtypes = [
@@ -202,6 +214,7 @@ LJX8IF_TrgErrorReset.argtypes = [
     ]
 
 # LJX8IF_GetTriggerAndPulseCount
+# Gets the trigger/pulse count
 LJX8IF_GetTriggerAndPulseCount = mdll.LJX8IF_GetTriggerAndPulseCount
 LJX8IF_GetTriggerAndPulseCount.restype = ctypes.c_int
 LJX8IF_GetTriggerAndPulseCount.argtypes = [
@@ -211,6 +224,7 @@ LJX8IF_GetTriggerAndPulseCount.argtypes = [
     ]
 
 # LJX8IF_SetTimerCount
+# Changes the timer count value
 LJX8IF_SetTimerCount = mdll.LJX8IF_SetTimerCount
 LJX8IF_SetTimerCount.restype = ctypes.c_int
 LJX8IF_SetTimerCount.argtypes = [
@@ -219,6 +233,7 @@ LJX8IF_SetTimerCount.argtypes = [
     ]
 
 # LJX8IF_GetTimerCount
+# Gets the timer count value
 LJX8IF_GetTimerCount = mdll.LJX8IF_GetTimerCount
 LJX8IF_GetTimerCount.restype = ctypes.c_int
 LJX8IF_GetTimerCount.argtypes = [
@@ -227,6 +242,7 @@ LJX8IF_GetTimerCount.argtypes = [
     ]
 
 # LJX8IF_GetHeadTemperature
+# Gets the head temperature
 LJX8IF_GetHeadTemperature = mdll.LJX8IF_GetHeadTemperature
 LJX8IF_GetHeadTemperature.restype = ctypes.c_int
 LJX8IF_GetHeadTemperature.argtypes = [
@@ -237,6 +253,7 @@ LJX8IF_GetHeadTemperature.argtypes = [
     ]
 
 # LJX8IF_GetHeadModel
+# Gets the head model
 LJX8IF_GetHeadModel = mdll.LJX8IF_GetHeadModel
 LJX8IF_GetHeadModel.restype = ctypes.c_int
 LJX8IF_GetHeadModel.argtypes = [
@@ -245,6 +262,7 @@ LJX8IF_GetHeadModel.argtypes = [
     ]
 
 # LJX8IF_GetSerialNumber
+# Gets the serial numbers
 LJX8IF_GetSerialNumber = mdll.LJX8IF_GetSerialNumber
 LJX8IF_GetSerialNumber.restype = ctypes.c_int
 LJX8IF_GetSerialNumber.argtypes = [
@@ -254,6 +272,7 @@ LJX8IF_GetSerialNumber.argtypes = [
     ]
 
 # LJX8IF_GetAttentionStatus
+# Gets the TRG_ERROR/MEM_FULL/TRG_PASS status
 LJX8IF_GetAttentionStatus = mdll.LJX8IF_GetAttentionStatus
 LJX8IF_GetAttentionStatus.restype = ctypes.c_int
 LJX8IF_GetAttentionStatus.argtypes = [
@@ -262,6 +281,7 @@ LJX8IF_GetAttentionStatus.argtypes = [
     ]
 
 # LJX8IF_Trigger
+# Issues a trigger
 LJX8IF_Trigger = mdll.LJX8IF_Trigger
 LJX8IF_Trigger.restype = ctypes.c_int
 LJX8IF_Trigger.argtypes = [
@@ -269,6 +289,7 @@ LJX8IF_Trigger.argtypes = [
     ]
 
 # LJX8IF_StartMeasure
+# Starts batch measurement/Starts the synchronization of multiple controllers
 LJX8IF_StartMeasure = mdll.LJX8IF_StartMeasure
 LJX8IF_StartMeasure.restype = ctypes.c_int
 LJX8IF_StartMeasure.argtypes = [
@@ -276,6 +297,7 @@ LJX8IF_StartMeasure.argtypes = [
     ]
 
 # LJX8IF_StopMeasure
+# Stops batch measurement/Stops the synchronization of multiple controllers
 LJX8IF_StopMeasure = mdll.LJX8IF_StopMeasure
 LJX8IF_StopMeasure.restype = ctypes.c_int
 LJX8IF_StopMeasure.argtypes = [
@@ -283,6 +305,7 @@ LJX8IF_StopMeasure.argtypes = [
     ]
 
 # LJX8IF_ClearMemory
+# Clears the internal memory
 LJX8IF_ClearMemory = mdll.LJX8IF_ClearMemory
 LJX8IF_ClearMemory.restype = ctypes.c_int
 LJX8IF_ClearMemory.argtypes = [
@@ -290,6 +313,7 @@ LJX8IF_ClearMemory.argtypes = [
     ]
 
 # LJX8IF_SetSetting
+# Sends a setting to the controller
 LJX8IF_SetSetting = mdll.LJX8IF_SetSetting
 LJX8IF_SetSetting.restype = ctypes.c_int
 LJX8IF_SetSetting.argtypes = [
@@ -302,6 +326,7 @@ LJX8IF_SetSetting.argtypes = [
     ]
 
 # LJX8IF_GetSetting
+# Gets a setting from the controller
 LJX8IF_GetSetting = mdll.LJX8IF_GetSetting
 LJX8IF_GetSetting.restype = ctypes.c_int
 LJX8IF_GetSetting.argtypes = [
@@ -313,6 +338,7 @@ LJX8IF_GetSetting.argtypes = [
     ]
 
 # LJX8IF_InitializeSetting
+# Initializes a controller setting
 LJX8IF_InitializeSetting = mdll.LJX8IF_InitializeSetting
 LJX8IF_InitializeSetting.restype = ctypes.c_int
 LJX8IF_InitializeSetting.argtypes = [
@@ -322,6 +348,7 @@ LJX8IF_InitializeSetting.argtypes = [
     ]
 
 # LJX8IF_ReflectSetting
+# Reflects the contents of the write settings area in the running settings area and the save area
 LJX8IF_ReflectSetting = mdll.LJX8IF_ReflectSetting
 LJX8IF_ReflectSetting.restype = ctypes.c_int
 LJX8IF_ReflectSetting.argtypes = [
@@ -331,6 +358,7 @@ LJX8IF_ReflectSetting.argtypes = [
     ]
 
 # LJX8IF_RewriteTemporarySetting
+# Overwrites the contents of the write settings area with the settings in the running settings area and the save area
 LJX8IF_RewriteTemporarySetting = mdll.LJX8IF_RewriteTemporarySetting
 LJX8IF_RewriteTemporarySetting.restype = ctypes.c_int
 LJX8IF_RewriteTemporarySetting.argtypes = [
@@ -339,6 +367,7 @@ LJX8IF_RewriteTemporarySetting.argtypes = [
     ]
 
 # LJX8IF_CheckMemoryAccess
+# Checks whether settings are being saved to the save area
 LJX8IF_CheckMemoryAccess = mdll.LJX8IF_CheckMemoryAccess
 LJX8IF_CheckMemoryAccess.restype = ctypes.c_int
 LJX8IF_CheckMemoryAccess.argtypes = [
@@ -347,6 +376,7 @@ LJX8IF_CheckMemoryAccess.argtypes = [
     ]
 
 # LJX8IF_SetXpitch
+# Changes the X pitch of profile
 LJX8IF_SetXpitch = mdll.LJX8IF_SetXpitch
 LJX8IF_SetXpitch.restype = ctypes.c_int
 LJX8IF_SetXpitch.argtypes = [
@@ -355,6 +385,7 @@ LJX8IF_SetXpitch.argtypes = [
     ]
 
 # LJX8IF_GetXpitch
+# Gets the X pitch of profile
 LJX8IF_GetXpitch = mdll.LJX8IF_GetXpitch
 LJX8IF_GetXpitch.restype = ctypes.c_int
 LJX8IF_GetXpitch.argtypes = [
@@ -363,6 +394,7 @@ LJX8IF_GetXpitch.argtypes = [
     ]
 
 # LJX8IF_ChangeActiveProgram
+# Changes the active program number
 LJX8IF_ChangeActiveProgram = mdll.LJX8IF_ChangeActiveProgram
 LJX8IF_ChangeActiveProgram.restype = ctypes.c_int
 LJX8IF_ChangeActiveProgram.argtypes = [
@@ -371,6 +403,7 @@ LJX8IF_ChangeActiveProgram.argtypes = [
     ]
 
 # LJX8IF_GetActiveProgram
+# Gets the active program number
 LJX8IF_GetActiveProgram = mdll.LJX8IF_GetActiveProgram
 LJX8IF_GetActiveProgram.restype = ctypes.c_int
 LJX8IF_GetActiveProgram.argtypes = [
@@ -379,6 +412,7 @@ LJX8IF_GetActiveProgram.argtypes = [
     ]
 
 # LJX8IF_GetProfile
+# Gets profile
 LJX8IF_GetProfile = mdll.LJX8IF_GetProfile
 LJX8IF_GetProfile.restype = ctypes.c_int
 LJX8IF_GetProfile.argtypes = [
@@ -391,6 +425,7 @@ LJX8IF_GetProfile.argtypes = [
     ]
 
 # LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray
+# Performs the initialization required for high-speed data communication (SimpleArray)
 LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray = mdll.LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray
 LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray.restype = ctypes.c_int
 LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray.argtypes = [
@@ -403,6 +438,7 @@ LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray.argtypes = [
     ]
 
 # LJX8IF_PreStartHighSpeedDataCommunication
+# Request preparation before starting high-speed data communication
 LJX8IF_PreStartHighSpeedDataCommunication = mdll.LJX8IF_PreStartHighSpeedDataCommunication
 LJX8IF_PreStartHighSpeedDataCommunication.restype = ctypes.c_int
 LJX8IF_PreStartHighSpeedDataCommunication.argtypes = [
@@ -412,6 +448,7 @@ LJX8IF_PreStartHighSpeedDataCommunication.argtypes = [
     ]
 
 # LJX8IF_StartHighSpeedDataCommunication
+# Starts high-speed data communication
 LJX8IF_StartHighSpeedDataCommunication = mdll.LJX8IF_StartHighSpeedDataCommunication
 LJX8IF_StartHighSpeedDataCommunication.restype = ctypes.c_int
 LJX8IF_StartHighSpeedDataCommunication.argtypes = [
@@ -419,6 +456,7 @@ LJX8IF_StartHighSpeedDataCommunication.argtypes = [
     ]
 
 # LJX8IF_StopHighSpeedDataCommunication
+# Stops high-speed data communication
 LJX8IF_StopHighSpeedDataCommunication = mdll.LJX8IF_StopHighSpeedDataCommunication
 LJX8IF_StopHighSpeedDataCommunication.restype = ctypes.c_int
 LJX8IF_StopHighSpeedDataCommunication.argtypes = [
@@ -426,6 +464,7 @@ LJX8IF_StopHighSpeedDataCommunication.argtypes = [
     ]
 
 # LJX8IF_FinalizeHighSpeedDataCommunication
+# Perform high-speed data communication termination processing
 LJX8IF_FinalizeHighSpeedDataCommunication = mdll.LJX8IF_FinalizeHighSpeedDataCommunication
 LJX8IF_FinalizeHighSpeedDataCommunication.restype = ctypes.c_int
 LJX8IF_FinalizeHighSpeedDataCommunication.argtypes = [
@@ -433,6 +472,7 @@ LJX8IF_FinalizeHighSpeedDataCommunication.argtypes = [
     ]
 
 # LJX8IF_GetZUnitSimpleArray
+# Gets conversion factors for the SimpleArray
 LJX8IF_GetZUnitSimpleArray = mdll.LJX8IF_GetZUnitSimpleArray
 LJX8IF_GetZUnitSimpleArray.restype = ctypes.c_int
 LJX8IF_GetZUnitSimpleArray.argtypes = [
