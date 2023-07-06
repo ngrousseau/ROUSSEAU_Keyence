@@ -1,7 +1,7 @@
 # -*- coding: 'unicode' -*-
 # Copyright (c) 2021 KEYENCE CORPORATION. All rights reserved.
 
-import ROUSSEAU_LJXAwrap as LJXAwrap
+import LJXAwrap
 
 import ctypes
 import sys
