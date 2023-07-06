@@ -1,7 +1,7 @@
 # -*- coding: 'unicode' -*-
 # Copyright (c) 2021 KEYENCE CORPORATION. All rights reserved.
 
-import LJXAwrap
+import ROUSSEAU_LJXAwrap as LJXAwrap
 
 import ctypes
 import sys
@@ -19,6 +19,10 @@ import matplotlib.pyplot as plt
 #
 ##############################################################################
 
+
+##############################################################################
+# Define global variables to be manipulated throughout the script.
+##############################################################################
 image_available = False  # Flag to confirm the completion of image acquisition.
 ysize_acquired = 0       # Number of Y lines of acquired image.
 z_val = []               # The buffer for height image.
