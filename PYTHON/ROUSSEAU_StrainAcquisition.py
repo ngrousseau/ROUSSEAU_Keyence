@@ -25,9 +25,14 @@ import PySimpleGUI as sg
 # Define global variables to be manipulated throughout the script.
 ##############################################################################
 
+force = [] # Array to store the force data
+lengths = []
+strain = []
+
 def main(): 
-    force = []  # Array to store the data values 
-    force2 = []
+    global force
+    global lengths
+    global strain
     
     # Define the layout of the GUI 
     layout = [
@@ -67,13 +72,15 @@ def main():
                     global ysize_acquired
                     global z_val
                     global lumi_val
+                    
+                    gauge_length = 10
 
                     ##################################################################
                     # CHANGE THIS BLOCK TO MATCH YOUR SENSOR SETTINGS (FROM HERE)
                     ##################################################################
 
                     deviceId = 0                        # Set "0" if you use only 1 head.
-                    ysize = 10                         # Number of measurements desired.
+                    ysize = 10                        # Number of measurements desired (Must be even #).
                     timeout_sec = 10                   # Timeout value for the acquiring image
                     use_external_batchStart = False     # 'True' if you start batch externally.
 
@@ -201,7 +208,7 @@ def main():
                         plt.subplots_adjust(hspace=0.5)
 
                         # Height profile display
-                        ax3 = fig.add_subplot(3, 1, 1)
+                        ax1 = fig.add_subplot(2, 1, 1)
                         sl = int(xsize * ysize_acquired / 2)  # the horizontal center profile
 
                         x_val_mm = [0.0] * xsize
@@ -213,7 +220,7 @@ def main():
 
                             # Conver Z data to the actual length in millimeters
                             if z_val[sl + i] == 0:  # invalid value
-                                z_val_mm[i] = np.nan
+                                z_val_mm[i] = -25
                             else:
                                 # 'Simple array data' is offset to be unsigned 16-bit data.
                                 # Decode by subtracting 32768 to get a signed value.
@@ -235,51 +242,31 @@ def main():
 
                         plt.ylim(plotz_min, plotz_max)
 
-                        ax3.plot(x_val_mm, z_val_mm)
+                        ax1.plot(x_val_mm, z_val_mm)
 
                         plt.title("Height Profile 1")
                         
-                        # Create total Z array in mm (represents every line)
-                        zsize = len(z_val)
-                        z_val_tot_mm = [0.0] * zsize
-                        for i in range(zsize):
-                            # Conver Z data to the actual length in millimeters
-                            if z_val[i] == 0:  # invalid value
-                                z_val_tot_mm[i] = -25
-                            else:
-                                # 'Simple array data' is offset to be unsigned 16-bit data.
-                                # Decode by subtracting 32768 to get a signed value.
-                                z_val_tot_mm[i] = int(z_val[i]) - 32768  # decode
-                                z_val_tot_mm[i] *= ZUnit.value / 100.0  # um
-                                z_val_tot_mm[i] /= 1000.0  # mm
-                        
+
                         # Find the max z in every line taken
                         max_values1 = []
+                        max_value1 = max(z_val_mm[0:int(xsize/2)])
+                        max_values1.append(max_value1) 
                         max_values2 = []
+                        max_value2 = max(z_val_mm[int(xsize/2):xsize])
+                        max_values2.append(max_value2)
                         indices1 = []
+                        index1 = z_val_mm.index(max_value1)
+                        indices1.append(index1)
                         indices2 = []
-                        lengths = []
-                        
-                        for i in range(0, zsize, xsize): 
-                            chunk = z_val_tot_mm[i:i+xsize]
-                            max_value1 = max(chunk[0:int(xsize/2)]) 
-                            max_value2 = max(chunk[int(xsize/2):xsize])
-                            index1 = chunk.index(max_value1)
-                            index2 = chunk.index(max_value2)
-                            max_values1.append(max_value1) 
-                            max_values2.append(max_value2)
-                            indices1.append(index1)
-                            indices2.append(index2)
-                            length = x_val_mm[index2]-x_val_mm[index1]
-                            lengths.append(length)
-                            
+                        index2 = z_val_mm.index(max_value2)
+                        indices2.append(index2)
+                        length = (x_val_mm[index2]-x_val_mm[index1])
+                        lengths.append(length)
+                        strain.append((length-gauge_length)/length)
                         print(max_values1)
                         print (max_values2)
                         print(indices1)
                         print(indices2)
-                        print(lengths)
-                        
-                        # Find the two max Z values on either side of the center
 
 
 
@@ -334,5 +321,15 @@ def main():
 if __name__ == '__main__': 
     main()
 
-
+if strain:
+    if force: 
+        plt.plot(strain,force, marker = 'o', linestyle = 'dashed')
+        plt.title('Force-Strain Plot')
+        plt.xlabel('Strain')
+        plt.ylabel('Force')
+        plt.grid()
+    else:
+        print('No force data avaialable.')
+else: 
+    print('No force or strain data avaialable.')
 
