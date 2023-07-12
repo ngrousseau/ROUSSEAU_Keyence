@@ -1,23 +1,21 @@
 # -*- coding: 'unicode' -*-
 # Copyright (c) 2021 KEYENCE CORPORATION. All rights reserved.
+# This script takes samples from the sample_ImageAcquisition.py script made 
+# by Keyence.
 
-import LJXAwrap
 
+import LJXAwrap # Import Keyence wrapper script
 import ctypes
 import sys
 import time
-
-
 import numpy as np
 import matplotlib.pyplot as plt
-import PySimpleGUI as sg
+import PySimpleGUI as sg # Install pysimplegui with pip
+
 
 ##############################################################################
-# sample_ImageAcquisition.py: LJ-X8000A Image acquisition sample.
-#
-# -First half part: Describes how to acquire images via LJXAwrap I/F.
-# -Second half part: Describes how to display images using additional modules.
-#
+# StrainAcquisition.py: LJ-X8000A to acquire strain data using a specimen with
+# clear extrusions by collecting line profiles.
 ##############################################################################
 
 
@@ -25,30 +23,38 @@ import PySimpleGUI as sg
 # Define global variables to be manipulated throughout the script.
 ##############################################################################
 
-force = [] # Array to store the force data
-lengths = []
-strain = []
+force = [] # Array to store manually entered force data
+stress = [] # Array to store stress data
+lengths = [] # Specimen lengths at each measurement point
+strain = [] # Strain at each measurement point (relies on input gauge length)
+status_info = {} # Dataset of helpful data 
 
 def main(): 
     global force
     global lengths
     global strain
+    global stress
+    
+    
+    ###########################################################################
+    # GUI
+    ###########################################################################
     
     # Define the layout of the GUI 
     layout = [
     [sg.Text('Enter a force value (N):'), sg.Input(key='-INPUT-')],
-    [sg.Button('Add'), sg.Button('Exit')],
+    [sg.Button('Add'), sg.Button('Done')],
     [sg.Listbox(values=[], size=(40, 10), key='-LISTBOX-')]
     ]
     
     # Create the window
     window = sg.Window('Data Entry', layout)
     
-    # Event loop
+    # Event loop  for GUI inputs
     while True:
         event, values = window.read() 
-        
-        if event == sg.WINDOW_CLOSED or event == 'Exit':
+
+        if event == sg.WINDOW_CLOSED or event == 'Done':
             break
         elif event == 'Add':
                 value = values['-INPUT-']
@@ -58,13 +64,26 @@ def main():
                 force.append(value)
                 window['-LISTBOX-'].update(force)  # Update the listbox with the new data
                 window['-INPUT-'].update('')  # Clear the input field
-
                 
+                
+                ###############################################################
+                # Define more global variables.
+                ###############################################################
                 image_available = False  # Flag to confirm the completion of image acquisition.
                 ysize_acquired = 0       # Number of Y lines of acquired image.
                 z_val = []               # The buffer for height image.
-                lumi_val = []            # The buffer for luminance image.
+                
+                
+                ###############################################################
+                # CHANGE THIS BLOCK TO MATCH YOUR SPECIMEN PROPERTIES
+                ###############################################################
+                                    
+                gauge_length = 10 # Specimen gauge length (mm)
+                cross_section = 10 # Specimen cross sectional area (m^2)
 
+                ###############################################################
+                # CHANGE THIS BLOCK TO MATCH YOUR SAMPLE PROPERTIES
+                ###############################################################
 
                 def main():
 
@@ -72,12 +91,11 @@ def main():
                     global ysize_acquired
                     global z_val
                     global lumi_val
-                    
-                    gauge_length = 10
 
-                    ##################################################################
-                    # CHANGE THIS BLOCK TO MATCH YOUR SENSOR SETTINGS (FROM HERE)
-                    ##################################################################
+
+                    ###########################################################
+                    # CHANGE THIS BLOCK TO MATCH YOUR SENSOR SETTINGS
+                    ###########################################################
 
                     deviceId = 0                        # Set "0" if you use only 1 head.
                     ysize = 10                        # Number of measurements desired (Must be even #).
@@ -92,9 +110,14 @@ def main():
                     ethernetConfig.wPortNo = 24691          # Port No.
                     HighSpeedPortNo = 24692                 # Port No. for high-speed
 
-                    ##################################################################
+                    ###########################################################
                     # CHANGE THIS BLOCK TO MATCH YOUR SENSOR SETTINGS (TO HERE)
-                    ##################################################################
+                    ###########################################################
+                    
+                    
+                    ###########################################################
+                    # Establish Communication with the Laser
+                    ###########################################################
 
                     # Ethernet open
                     res = LJXAwrap.LJX8IF_EthernetOpen(0, ethernetConfig)
@@ -208,7 +231,7 @@ def main():
                         plt.subplots_adjust(hspace=0.5)
 
                         # Height profile display
-                        ax1 = fig.add_subplot(2, 1, 1)
+                        ax1 = fig.add_subplot(3, 1, 1)
                         sl = int(xsize * ysize_acquired / 2)  # the horizontal center profile
 
                         x_val_mm = [0.0] * xsize
@@ -247,28 +270,47 @@ def main():
                         plt.title("Height Profile 1")
                         
 
-                        # Find the max z in every line taken
-                        max_values1 = []
-                        max_value1 = max(z_val_mm[0:int(xsize/2)])
-                        max_values1.append(max_value1) 
-                        max_values2 = []
-                        max_value2 = max(z_val_mm[int(xsize/2):xsize])
-                        max_values2.append(max_value2)
-                        indices1 = []
-                        index1 = z_val_mm.index(max_value1)
-                        indices1.append(index1)
-                        indices2 = []
-                        index2 = z_val_mm.index(max_value2)
-                        indices2.append(index2)
+                        # Find max height on the left side of profile and index
+                        chunk1 = z_val_mm[0:int(xsize/2)]
+                        max_value1 = max(chunk1)
+                        index1 = chunk1.index(max_value1)
+                        
+                        # Find max height on the right size of profile ad index
+                        chunk2 = z_val_mm[int(xsize/2):xsize]
+                        max_value2 = max(chunk2)
+                        index2 = chunk2.index(max_value2) + int(xsize/2)
+                        
+                        # Calculate length between maxima based on  laser 
+                        # resolution and determine strain
                         length = (x_val_mm[index2]-x_val_mm[index1])
-                        lengths.append(length)
+                        lengths.append(length)        
                         strain.append((length-gauge_length)/length)
-                        print(max_values1)
-                        print (max_values2)
-                        print(indices1)
-                        print(indices2)
-
-
+                        
+                        # Convert force to stress
+                        stress.append(force[-1]/cross_section)
+                        
+                        status = { 
+                            'Peak 1': max_value1,
+                            'Index 1': index1,
+                            'Peak 2': max_value2,
+                            'Index 2': index2,
+                            'Length': length,
+                        }
+                        
+                        status_info['status'] = status
+                        
+                        ax2 = fig.add_subplot(3, 1, 2)
+                        if strain:
+                            if force: 
+                                ax2.plot(strain,stress, marker = 'o', linestyle = 'dashed')
+                                plt.title('Stress-Strain Plot')
+                                plt.xlabel('Strain')
+                                plt.ylabel('Stress')
+                                plt.grid()
+                            else:
+                                print('No force data avaialable.')
+                        else: 
+                            print('No force or strain data avaialable.')
 
                         # Show all plot
                         print("\nPress 'q' key to exit the program...")
@@ -316,20 +358,10 @@ def main():
                     sg.popup('Please enter a valid integer.')  # Show an error message for invalid input
     
     window.close()
-    print(force)
     
 if __name__ == '__main__': 
     main()
 
-if strain:
-    if force: 
-        plt.plot(strain,force, marker = 'o', linestyle = 'dashed')
-        plt.title('Force-Strain Plot')
-        plt.xlabel('Strain')
-        plt.ylabel('Force')
-        plt.grid()
-    else:
-        print('No force data avaialable.')
-else: 
-    print('No force or strain data avaialable.')
+
+
 
