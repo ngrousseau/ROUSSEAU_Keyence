@@ -50,7 +50,7 @@ If no force data is available or only strain data is desired, arbitrary values c
 
 Each time a new force value is inserted into the prompt box, a profile plot and stress strain plot will be developed.
 
-insert images
+![Graphs](images/profile_image.jpg)
 
 # License Agreement
 Please review the software license agreement at the end of the README.pdf contained in the /License folder.
