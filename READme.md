@@ -14,16 +14,43 @@ For this project, a Keyence profiling laser and controller were used to collect 
 * To communicate with another controller, different wrapper files may need to be obtained and this script may need to be altered.
 
 # User Instructions
-The program (ROUSSEAU_StrainAcquisition.py) is located in the "PYTHON" folder. To execute this script and acquire strain data run the script using a compiler, or type the following when in the PYTHON directory.
+The program (ROUSSEAU_StrainAcquisition.py) is located in the "PYTHON" folder. Prior to executing the script, rewrite the sensor settings and specimen properties sections as desired.
 
 ```
+###################################################
+# CHANGE THIS BLOCK TO MATCH YOUR SAMPLE PROPERTIES
+###################################################
+```
+```
+###############################################
+CHANGE THIS BLOCK TO MATCH YOUR SENSOR SETTINGS
+###############################################
+```
 
+The parameters that should be rewritten include:
+* __Gauge Length:__ Initial length of the specimen being scanned.
+* __Cross Sectional Area:__ Cross-sectional area of the specimen being scanned.
+* __Device ID:__ Identifier when using multiple heads.
+* __IP Address/Port Number:__ Network settings for the LJ-X8000A controller.
+* __Image Size in Y Direction:__ Number of profile lines to be acquired each scan.
+* __Timeout:__ Time in seconds to acquire data before an error.
+
+
+To execute this script and acquire strain data run the script using a compiler, or type the following when in the PYTHON directory.
+
+```
 $ python3 ROUSSEAU_StrainAcquisition.py
-
 ```
 
 After the communication is established, the user will be prompted to input force data. Please note a strain measurement will only be taken each time the user inputs a force value. 
 
 insert image here
 
-If only 
+If no force data is available or only strain data is desired, arbitrary values can be inserted into the prompt. Otherwise, the script must be edited to exclude the prompt (note to self: maybe include a TRUE/FALSE condition to measure strain with or without force data).
+
+Each time a new force value is inserted into the prompt box, a profile plot and stress strain plot will be developed.
+
+insert images
+
+# License Agreement
+Please review the software license agreement at the end of the README.pdf contained in the /License folder.
