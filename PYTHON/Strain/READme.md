@@ -44,13 +44,13 @@ $ python3 ROUSSEAU_StrainAcquisition.py
 
 After the communication is established, the user will be prompted to input force data. Please note a strain measurement will only be taken each time the user inputs a force value. 
 
-![GUI](../images/GUI.jpg)
+![GUI](../../images/GUI.jpg)
 
 If no force data is available or only strain data is desired, arbitrary values can be inserted into the prompt. Otherwise, the script must be edited to exclude the prompt (note to self: maybe include a TRUE/FALSE condition to measure strain with or without force data).
 
 Each time a new force value is inserted into the prompt box, a profile plot and stress strain plot will be developed.
 
-![Graphs](../images/profile_image.jpg)
+![Graphs](../../images/profile_image.jpg)
 
 # License Agreement
 Please review the software license agreement at the end of the README.pdf contained in the /License folder.
