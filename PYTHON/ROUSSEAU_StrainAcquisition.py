@@ -50,7 +50,7 @@ def main():
     # Create the window
     window = sg.Window('Data Entry', layout)
     
-    # Event loop  for GUI inputs
+    # Event loop for GUI inputs
     while True:
         event, values = window.read() 
 
