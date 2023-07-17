@@ -6,14 +6,14 @@ This project was developed to determine if strain could be measured using a prof
 
 For this project, a Keyence profiling laser and controller were used to collect data. Since all first party software compatible with the LJ-X8000A controller (LJ-X Navigator and LJ-X Observer) are only compatible with Windows operating systems, the LJXAwrap wrapper files must be acquired from Keyence. These files allow compatibility with both Windows and Linux operating systems and contain all the necessary functions required to communicate with the LJ-X8000A controller. Please note this script is not usable without the functions from the wrapper script and associated files. Reaching out to Keyence is required to properly obtain the wrapper files.
 
-### More information relevant to this project:
+## More information relevant to this project:
 * This script uses the Python modules: LJXAwrap, ctypes, sys, time, numpy, matplotlib, and PySimpleGUI (install with pip and requires Python 3.4+)
 * The script was written with Python 3.9.
 * A Keyence LJ-X8080 profiling laser was used with this script.
 * This script is only compatible with a LJ-X8000A controller.
 * To communicate with another controller, different wrapper files may need to be obtained and this script may need to be altered.
 
-### User Instructions
+## User Instructions
 The program (ROUSSEAU_StrainAcquisition.py) is located in the "PYTHON" folder. Prior to executing the script, rewrite the sensor settings and specimen properties sections as desired.
 
 ```
@@ -52,5 +52,5 @@ Each time a new force value is inserted into the prompt box, a profile plot and 
 
 ![Graphs](../../images/profile_image.jpg)
 
-# License Agreement
+## License Agreement
 Please review the software license agreement at the end of the README.pdf contained in the /License folder.
