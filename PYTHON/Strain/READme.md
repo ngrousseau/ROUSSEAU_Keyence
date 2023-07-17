@@ -53,4 +53,4 @@ Each time a new force value is inserted into the prompt box, a profile plot and 
 ![Graphs](../../images/profile_image.jpg)
 
 ## License Agreement
-Please review the software license agreement at the end of the README.pdf contained in the /License folder.
+Please review the software license agreement at the end of the README.pdf contained in the /License folder of the main branch.
