@@ -68,14 +68,6 @@ def main():
                 
                 
                 ###############################################################
-                # Define more global variables.
-                ###############################################################
-                image_available = False  # Flag to confirm the completion of image acquisition.
-                ysize_acquired = 0       # Number of Y lines of acquired image.
-                z_val = []               # The buffer for height image.
-                
-                
-                ###############################################################
                 # CHANGE THIS BLOCK TO MATCH YOUR SPECIMEN PROPERTIES
                 ###############################################################
                                     
@@ -85,6 +77,14 @@ def main():
                 ###############################################################
                 # CHANGE THIS BLOCK TO MATCH YOUR SAMPLE PROPERTIES
                 ###############################################################
+                
+                
+                ###############################################################
+                # Define more global variables.
+                ###############################################################
+                image_available = False  # Flag to confirm the completion of image acquisition.
+                ysize_acquired = 0       # Number of Y lines of acquired image.
+                z_val = []               # The buffer for height image.
 
                 def main():
 
@@ -251,12 +251,16 @@ def main():
                                 z_val_mm[i] = int(z_val[sl + i]) - 32768  # decode
                                 z_val_mm[i] *= ZUnit.value / 100.0  # um
                                 z_val_mm[i] /= 1000.0  # mm
+                        
                                 
+                        # Write z values to txt file
                         f = open('Strain_Distance.txt','a')
                         for i in range(xsize):
                             f.write(str(z_val_mm[i]) + '\n')
                         f.write('\n')
                             
+                        
+                        # Plot height profile
                         plotz_min = np.nanmin(z_val_mm)
                         if np.isnan(plotz_min):
                             plotz_min = -1.0
@@ -293,7 +297,7 @@ def main():
                         print(index2)
                         
                         
-                        # Wires
+                        # Define peak/wire regions and plot 
                         wire_red = []
                         for i in range(xsize):
                             if z_val_mm[i] != -25:
@@ -337,7 +341,7 @@ def main():
                         plt.title('Wire 2')
                         
                         
-                        # Gaussian Fit
+                        # Gaussian/Normal Fit of Peak/Wire Regions
                         fitter = modeling.fitting.LevMarLSQFitter()
                         model = modeling.models.Gaussian1D()   # depending on the data you need to give some initial values
                         fitted_model1 = fitter(model, x1_peak, wire1_z)
