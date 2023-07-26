@@ -53,7 +53,7 @@ This script measures strain by tracking the distance between 2 peaks. For exampl
 2. The two peaks are at least 2 mm part.
 The 2mm value can be changed as desired, but it works for the purposes of this experiment.
 
-In order to ensure the same point on the peak is being tracked, the peak regions ($\pm$2 mm) were isolated and given gaussian/normal distribution curves where the center of the peak was defined as the center/mean of the distribution. The strain was measured by tracking how the distance changed between the two centers. 
+In order to ensure the same point on the peak is being tracked, the peak regions ( $\pm$ 2 mm) were isolated and given gaussian/normal distribution curves where the center of the peak was defined as the center/mean of the distribution. The strain was measured by tracking how the distance changed between the two centers. 
 
 Each time a new force value is inserted into the prompt box, a profile plot and stress strain plot will be developed and the profile data with be amended to the Strain_Distance.txt file.
 
