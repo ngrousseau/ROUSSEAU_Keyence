@@ -11,6 +11,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import PySimpleGUI as sg # Install pysimplegui with pip
+from astropy import modeling
 
 
 ##############################################################################
@@ -78,8 +79,8 @@ def main():
                 # CHANGE THIS BLOCK TO MATCH YOUR SPECIMEN PROPERTIES
                 ###############################################################
                                     
-                gauge_length = 10 # Specimen gauge length (mm)
-                cross_section = 10 # Specimen cross sectional area (m^2)
+                gauge_length = 33.5 # Specimen gauge length (mm)
+                cross_section = 40.3225 # Specimen cross sectional area (mm^2)
 
                 ###############################################################
                 # CHANGE THIS BLOCK TO MATCH YOUR SAMPLE PROPERTIES
@@ -227,11 +228,11 @@ def main():
                     ##################################################################
                     if True:
                         
-                        fig = plt.figure(figsize=(4.0, 6.0))
+                        fig = plt.figure(figsize=(8.0, 8.0))
                         plt.subplots_adjust(hspace=0.5)
 
                         # Height profile display
-                        ax1 = fig.add_subplot(3, 1, 1)
+                        ax1 = fig.add_subplot(2, 2, 1)
                         sl = int(xsize * ysize_acquired / 2)  # the horizontal center profile
 
                         x_val_mm = [0.0] * xsize
@@ -250,6 +251,11 @@ def main():
                                 z_val_mm[i] = int(z_val[sl + i]) - 32768  # decode
                                 z_val_mm[i] *= ZUnit.value / 100.0  # um
                                 z_val_mm[i] /= 1000.0  # mm
+                                
+                        f = open('Strain_Distance.txt','a')
+                        for i in range(xsize):
+                            f.write(str(z_val_mm[i]) + '\n')
+                        f.write('\n')
                             
                         plotz_min = np.nanmin(z_val_mm)
                         if np.isnan(plotz_min):
@@ -270,19 +276,93 @@ def main():
                         plt.title("Height Profile 1")
                         
 
-                        # Find max height on the left side of profile and index
-                        chunk1 = z_val_mm[0:int(xsize/2)]
-                        max_value1 = max(chunk1)
-                        index1 = chunk1.index(max_value1)
+                        # Find extrema of profile (must be at least 2 mm apart)
+                        max_value1 = max(z_val_mm)
+                        index1 = z_val_mm.index(max_value1)
+                        print(max_value1)
+                        print(index1)
                         
-                        # Find max height on the right size of profile ad index
-                        chunk2 = z_val_mm[int(xsize/2):xsize]
-                        max_value2 = max(chunk2)
-                        index2 = chunk2.index(max_value2) + int(xsize/2)
+                        if max(z_val_mm[0:index1-160]) > max(z_val_mm[index1+160:xsize]):
+                            max_value2 = max(z_val_mm[0:index1-160])
+                            index2 = z_val_mm[0:index1-160].index(max_value2)
+                        else:
+                            max_value2 = max(z_val_mm[index1+160:xsize])
+                            index2 = z_val_mm[index1+160:xsize].index(max_value2)+index1+160
+                            
+                        print(max_value2)
+                        print(index2)
                         
-                        # Calculate length between maxima based on  laser 
+                        
+                        # Wires
+                        wire_red = []
+                        for i in range(xsize):
+                            if z_val_mm[i] != -25:
+                                wire_red.append(z_val_mm[i])
+                                
+                                
+                        wire1_index = []
+                        wire1_zval = []
+                        for i in range(index1-160,index1+160):
+                            if z_val_mm[i] > np.average(wire_red)*1.10:
+                                wire1_index.append(i)
+                                wire1_zval.append(z_val_mm[i])
+                                
+                        wire1_z = []
+                        for i in range(len(wire1_zval)):
+                            wire1_z.append(wire1_zval[i] - np.min(wire1_zval))
+                        
+                        x1_peak = range(0,len(wire1_zval))
+                        
+                        print(wire1_index)
+                        ax3 = fig.add_subplot(2,2,3)
+                        ax3.plot(x1_peak,wire1_z,'o',color = 'red')
+                        plt.title('Wire 1')
+                        
+                        wire2_index = []
+                        wire2_zval = []
+                        for i in range(index2-160,index2+160):
+                            if z_val_mm[i] > np.average(wire_red)*1.10:
+                                wire2_index.append(i)
+                                wire2_zval.append(z_val_mm[i])
+                        print(np.min(wire2_zval))
+                        wire2_z = []
+                        for i in range(len(wire2_zval)):
+                            wire2_z.append(wire2_zval[i] - np.min(wire2_zval))
+                        
+                        x2_peak = range(0,len(wire2_zval))
+                        
+                        print(wire2_index)
+                        ax4 = fig.add_subplot(2,2,4)
+                        ax4.plot(x2_peak,wire2_z,'o',color = 'red')
+                        plt.title('Wire 2')
+                        
+                        
+                        # Gaussian Fit
+                        fitter = modeling.fitting.LevMarLSQFitter()
+                        model = modeling.models.Gaussian1D()   # depending on the data you need to give some initial values
+                        fitted_model1 = fitter(model, x1_peak, wire1_z)
+                        ax3.plot(x1_peak, fitted_model1(x1_peak),color = 'green')
+                        model1_list = fitted_model1(x1_peak).tolist()
+                        model1_max = np.max(model1_list)
+                        model1_index = model1_list.index(model1_max)
+                        index1 = wire1_index[model1_index]
+                        print(index1)
+                        
+                        
+                        fitter = modeling.fitting.LevMarLSQFitter()
+                        model = modeling.models.Gaussian1D()   # depending on the data you need to give some initial values
+                        fitted_model2 = fitter(model, x2_peak, wire2_z)
+                        ax4.plot(x2_peak, fitted_model2(x2_peak),color = 'green')
+                        model2_list = fitted_model2(x2_peak).tolist()
+                        model2_max = np.max(model2_list)
+                        model2_index = model2_list.index(model2_max)
+                        index2 = wire2_index[model2_index]
+                        print(index2)
+                        
+                        
+                        # Calculate length between extrema based on laser 
                         # resolution and determine strain
-                        length = (x_val_mm[index2]-x_val_mm[index1])
+                        length = abs(x_val_mm[index2]-x_val_mm[index1])
                         lengths.append(length)        
                         strain.append((length-gauge_length)/length)
                         
@@ -299,7 +379,7 @@ def main():
                         
                         status_info['status'] = status
                         
-                        ax2 = fig.add_subplot(3, 1, 2)
+                        ax2 = fig.add_subplot(2, 2, 2)
                         if strain:
                             if force: 
                                 ax2.plot(strain,stress, marker = 'o', linestyle = 'dashed')
@@ -311,6 +391,7 @@ def main():
                                 print('No force data avaialable.')
                         else: 
                             print('No force or strain data avaialable.')
+
 
                         # Show all plot
                         print("\nPress 'q' key to exit the program...")
