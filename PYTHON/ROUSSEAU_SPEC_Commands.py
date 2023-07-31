@@ -12,9 +12,9 @@ def main():
     #####################################################
     
     # Motor Limits in X, Y, Z (mm)
-    [x_min,x_max] = [0,150]
-    [y_min,y_max] = [0,150]
-    [z_min,z_max] = [0,50]
+    [x_min,x_max] = [1,149]
+    [y_min,y_max] = [1,149]
+    [z_min,z_max] = [0,49]
     
     # Motor steps/mm
     x_steps = 1
@@ -323,10 +323,36 @@ def main():
     # Writing SPEC Commands to a Text File Based on User Inputs.
     ############################################################
     
+    # Round values
+    x_min = round(x_min,2)
+    x_max = round(x_max,2)
+    y_min = round(x_min,2)
+    y_max = round(x_max,2)
+    z_min = round(z_min,2)
+    z_max = round(z_max,2)
+    phi_steps = round(phi_steps,2)
+    motor_x1_0 = round(motor_x1_0,2)
+    motor_x2_0 = round(motor_x2_0,2)
+    motor_y1_0 = round(motor_y1_0,2)
+    motor_y2_0 = round(motor_y2_0,2)
+    motor_x1_90 = round(motor_x1_90,2)
+    motor_x2_90 = round(motor_x2_90,2)
+    motor_y1_90 = round(motor_y1_90,2)
+    motor_y2_90 = round(motor_y2_90,2)
+    motor_x1_180 = round(motor_x1_180,2)
+    motor_x2_180 = round(motor_x2_180,2)
+    motor_y1_180 = round(motor_y1_180,2)
+    motor_y2_180 = round(motor_y2_180,2)
+    motor_x1_270 = round(motor_x1_270,2)
+    motor_x2_270 = round(motor_x2_270,2)
+    motor_y1_270 = round(motor_y1_270,2)
+    motor_y2_270 = round(motor_y2_270,2)
+   
+    
     g = open('SPEC_SIZE.txt','w')
     
     f = open('SPEC.txt','w')
-    f.write('1\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+    f.write('1 ' + "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' +  str(stage_rot) + '\n')
     count = 1
     
     if shape == 'Circle':
@@ -337,9 +363,9 @@ def main():
                 # a circle.
                 for i in range(phi_steps*360):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t' + str((i+1)/phi_steps) + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' + "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' +  str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' +  str(stage_rot) + '\n')
                 g.write(str(count))
             
             else:
@@ -353,16 +379,16 @@ def main():
                         z_factor = z_max-40*j
                     for i in range(phi_steps*360):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t' + str((i+1)/phi_steps) + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' ' +  "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                     if z_max-40*(j+1) > z_max-40*height_chunk:
                         z_factor = z_max-40*(j+1)
                         if z_factor < z_min:
                             z_factor = z_min
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                     else:
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                     g.write(str(count))
                 
         else:
@@ -371,9 +397,9 @@ def main():
                 # 40 mm and the shape is a circle.
                 for i in range(phi_steps*360):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t' + str((i+1)/phi_steps) + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' +  "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                 g.write(str(count))
                 
             else:
@@ -387,85 +413,85 @@ def main():
                         z_factor = z_max-40*j
                     for i in range(phi_steps*360):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t' + str((i+1)/phi_steps) + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' ' +  "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                     if z_max-40*(j+1) > z_max-40*height_chunk:
                         z_factor = z_max-40*(j+1)
                         if z_factor < z_min:
                             z_factor = z_min
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                     else:
                         count = count + 1
-                        f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                     g.write(str(count))
                     
     else:
         if height <= 40:
             # Height is less than 40 mm and the shape is a square.
             count = count + 1
-            f.write(str(count) + '\t' + str(motor_x1_0) + '\t' + str(motor_y1_0) + '\t' + str(z_max) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_0) + ' ' +  "{:.6f}".format(motor_y1_0) + ' ' + str(z_max) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             if motor_x1_0 == motor_x2_0:
                 for i in range(y_steps*((abs(motor_y2_0-motor_y1_0)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x2_0) + '\t' + str(motor_y1_0-(i+1)*(motor_y1_0-motor_y2_0)/(y_steps*((abs(motor_y2_0-motor_y1_0))))) + '\t' + str(z_max) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_0) + ' ' +  "{:.6f}".format(motor_y1_0-(i+1)*(motor_y1_0-motor_y2_0)/(y_steps*((abs(motor_y2_0-motor_y1_0))))) + ' ' + str(z_max) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             else:
                 for i in range(x_steps*((abs(motor_x2_0-motor_x1_0)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x1_0-(i+1)*(motor_x1_0-motor_x2_0)/(x_steps*((abs(motor_x2_0-motor_x1_0))))) + '\t' + str(motor_y2_0) + '\t' + str(z_max) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_0-(i+1)*(motor_x1_0-motor_x2_0)/(x_steps*((abs(motor_x2_0-motor_x1_0))))) + ' ' +  "{:.6f}".format(motor_y2_0) + ' ' + str(z_max) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t90\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 90.000000 0' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(motor_x1_90) + '\t' + str(motor_y1_90) + '\t' + str(z_max) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_90) + ' ' +  "{:.6f}".format(motor_y1_90) + ' ' + str(z_max) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             if motor_x1_90 == motor_x2_90:
                 for i in range(y_steps*((abs(motor_y2_90-motor_y1_90)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x2_90) + '\t' + str(motor_y1_90-(i+1)*(motor_y1_90-motor_y2_90)/(y_steps*((abs(motor_y2_90-motor_y1_90))))) + '\t' + str(z_max) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_90) + ' ' +  "{:.6f}".format(motor_y1_90-(i+1)*(motor_y1_90-motor_y2_90)/(y_steps*((abs(motor_y2_90-motor_y1_90))))) + ' ' + str(z_max) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             else:
                 for i in range(x_steps*((abs(motor_x2_90-motor_x1_90)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x1_90-(i+1)*(motor_x1_90-motor_x2_90)/(x_steps*((abs(motor_x2_90-motor_x1_90))))) + '\t' + str(motor_y2_90) + '\t' + str(z_max) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_90-(i+1)*(motor_x1_90-motor_x2_90)/(x_steps*((abs(motor_x2_90-motor_x1_90))))) + ' ' +  "{:.6f}".format(motor_y2_90) + ' ' + str(z_max) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t90\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 90.000000 0' + ' ' + str(stage_rot) + '\n')
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t' + '180\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' + '180.000000 0' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(motor_x1_180) + '\t' + str(motor_y1_180) + '\t' + str(z_max) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_180) + ' ' +  "{:.6f}".format(motor_y1_180) + ' ' + str(z_max) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             if motor_x1_180 == motor_x2_180:
                 for i in range(y_steps*((abs(motor_y2_180-motor_y1_180)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x2_180) + '\t' + str(motor_y1_180-(i+1)*(motor_y1_180-motor_y2_180)/(y_steps*((abs(motor_y2_180-motor_y1_180))))) + '\t' + str(z_max) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_180) + ' ' +  "{:.6f}".format(motor_y1_180-(i+1)*(motor_y1_180-motor_y2_180)/(y_steps*((abs(motor_y2_180-motor_y1_180))))) + ' ' + str(z_max) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             else:
                 for i in range(x_steps*((abs(motor_x2_180-motor_x1_180)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x1_180-(i+1)*(motor_x1_180-motor_x2_180)/(x_steps*((abs(motor_x2_180-motor_x1_180))))) + '\t' + str(motor_y2_180) + '\t' + str(z_max) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_180-(i+1)*(motor_x1_180-motor_x2_180)/(x_steps*((abs(motor_x2_180-motor_x1_180))))) + ' ' +  "{:.6f}".format(motor_y2_180) + ' ' + str(z_max) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t' + '180\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' + '180.000000 0' + ' ' + str(stage_rot) + '\n')
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t270\t0' + '\t' + str(stage_rot) + '\n')            
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')            
             
             count = count + 1
-            f.write(str(count) + '\t' + str(motor_x1_270) + '\t' + str(motor_y1_270) + '\t' + str(z_max) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_270) + ' ' +  "{:.6f}".format(motor_y1_270) + ' ' + str(z_max) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             if motor_x1_270 == motor_x2_270:
                 for i in range(y_steps*((abs(motor_y2_270-motor_y1_270)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x2_270) + '\t' + str(motor_y1_270-(i+1)*(motor_y1_270-motor_y2_270)/(y_steps*((abs(motor_y2_270-motor_y1_270))))) + '\t' + str(z_max) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_270) + ' ' +  "{:.6f}".format(motor_y1_270-(i+1)*(motor_y1_270-motor_y2_270)/(y_steps*((abs(motor_y2_270-motor_y1_270))))) + ' ' + str(z_max) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             else:
                 for i in range(x_steps*((abs(motor_x2_270-motor_x1_270)))):
                     count = count + 1
-                    f.write(str(count) + '\t' + str(motor_x1_270-(i+1)*(motor_x1_270-motor_x2_270)/(x_steps*((abs(motor_x2_270-motor_x1_270))))) + '\t' + str(motor_y2_270) + '\t' + str(z_max) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                    f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_270-(i+1)*(motor_x1_270-motor_x2_270)/(x_steps*((abs(motor_x2_270-motor_x1_270))))) + ' ' +  "{:.6f}".format(motor_y2_270) + ' ' + str(z_max) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
             
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t270\t0' + '\t' + str(stage_rot) + '\n')
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')
             count = count + 1
-            f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_max) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
-            g.write(str(count))
+            f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
+            g.write('1 ' + str(count))
             
         else:
             # The height is more than 40 mm and the shape is a square.
@@ -476,69 +502,70 @@ def main():
                 else:
                     z_factor = z_max-40*j
                 count = count + 1
-                f.write(str(count) + '\t' + str(motor_x1_0) + '\t' + str(motor_y1_0) + '\t' + str(z_factor) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_0) + ' ' +  "{:.6f}".format(motor_y1_0) + ' ' + str(z_factor) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 if motor_x1_0 == motor_x2_0:
                     for i in range(y_steps*((abs(motor_y2_0-motor_y1_0)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x2_0) + str(motor_y1_0-(i+1)*(motor_y1_0-motor_y2_0)/(y_steps*((abs(motor_y2_0-motor_y1_0))))) + '\t' + str(z_factor) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_0) +  "{:.6f}".format(motor_y1_0-(i+1)*(motor_y1_0-motor_y2_0)/(y_steps*((abs(motor_y2_0-motor_y1_0))))) + ' ' + str(z_factor) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 else:
                     for i in range(x_steps*((abs(motor_x2_0-motor_x1_0)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x1_0-(i+1)*(motor_x1_0-motor_x2_0)/(x_steps*((abs(motor_x2_0-motor_x1_0))))) + '\t' + str(motor_y2_0) + '\t' + str(z_factor) + '\t0' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' + str(motor_x1_0-(i+1)*(motor_x1_0-motor_x2_0)/(x_steps*((abs(motor_x2_0-motor_x1_0))))) + ' ' +  "{:.6f}".format(motor_y2_0) + ' ' + str(z_factor) + ' 0.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t90\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 90.000000 0' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(motor_x1_90) + '\t' + str(motor_y1_90) + '\t' + str(z_factor) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_90) + ' ' +  "{:.6f}".format(motor_y1_90) + ' ' + str(z_factor) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 if motor_x1_90 == motor_x2_90:
                     for i in range(y_steps*((abs(motor_y2_90-motor_y1_90)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x2_90) + '\t' + str(motor_y1_90-(i+1)*(motor_y1_90-motor_y2_90)/(y_steps*((abs(motor_y2_90-motor_y1_90))))) + '\t' + str(z_factor) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_90) + ' ' +  "{:.6f}".format(motor_y1_90-(i+1)*(motor_y1_90-motor_y2_90)/(y_steps*((abs(motor_y2_90-motor_y1_90))))) + ' ' + str(z_factor) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 else:
                     for i in range(x_steps*((abs(motor_x2_90-motor_x1_90)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x1_90-(i+1)*(motor_x1_90-motor_x2_90)/(x_steps*((abs(motor_x2_90-motor_x1_90))))) + '\t' + str(motor_y2_90) + '\t' + str(z_factor) + '\t90' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_90-(i+1)*(motor_x1_90-motor_x2_90)/(x_steps*((abs(motor_x2_90-motor_x1_90))))) + ' ' +  "{:.6f}".format(motor_y2_90) + ' ' + str(z_factor) + ' 90.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t90\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 90.000000 0' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t' + '180\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' ' + '180.000000 0' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(motor_x1_180) + '\t' + str(motor_y1_180) + '\t' + str(z_factor) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_180) + ' ' +  "{:.6f}".format(motor_y1_180) + ' ' + str(z_factor) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 if motor_x1_180 == motor_x2_180:
                     for i in range(y_steps*((abs(motor_y2_180-motor_y1_180)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x2_180) + '\t' + str(motor_y1_180-(i+1)*(motor_y1_180-motor_y2_180)/(y_steps*((abs(motor_y2_180-motor_y1_180))))) + '\t' + str(z_factor) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_180) + ' ' +  "{:.6f}".format(motor_y1_180-(i+1)*(motor_y1_180-motor_y2_180)/(y_steps*((abs(motor_y2_180-motor_y1_180))))) + ' ' + str(z_factor) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 else:
                     for i in range(x_steps*((abs(motor_x2_180-motor_x1_180)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x1_180-(i+1)*(motor_x1_180-motor_x2_180)/(x_steps*((abs(motor_x2_180-motor_x1_180))))) + '\t' + str(motor_y2_180) + '\t' + str(z_factor) + '\t' + '180' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_180-(i+1)*(motor_x1_180-motor_x2_180)/(x_steps*((abs(motor_x2_180-motor_x1_180))))) + ' ' +  "{:.6f}".format(motor_y2_180) + ' ' + str(z_factor) + ' ' + '180.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t' + '180\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' ' + '180.000000 0' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t270\t0' + '\t' + str(stage_rot) + '\n')            
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')            
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(motor_x1_270) + '\t' + str(motor_y1_270) + '\t' + str(z_factor*j) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_270) + ' ' +  "{:.6f}".format(motor_y1_270) + ' ' + str(z_factor*j) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 if motor_x1_270 == motor_x2_270:
                     for i in range(y_steps*((abs(motor_y2_270-motor_y1_270)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x2_270) + '\t' + str(motor_y1_270-(i+1)*(motor_y1_270-motor_y2_270)/(y_steps*((abs(motor_y2_270-motor_y1_270))))) + '\t' + str(z_factor) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x2_270) + ' ' +  "{:.6f}".format(motor_y1_270-(i+1)*(motor_y1_270-motor_y2_270)/(y_steps*((abs(motor_y2_270-motor_y1_270))))) + ' ' + str(z_factor) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 else:
                     for i in range(x_steps*((abs(motor_x2_270-motor_x1_270)))):
                         count = count + 1
-                        f.write(str(count) + '\t' + str(motor_x1_270-(i+1)*(motor_x1_270-motor_x2_270)/(x_steps*((abs(motor_x2_270-motor_x1_270))))) + '\t' + str(motor_y2_270) + '\t' + str(z_factor) + '\t270' + '\t' + '1' + '\t' + str(stage_rot) + '\n')
+                        f.write(str(count) + ' ' +  "{:.6f}".format(motor_x1_270-(i+1)*(motor_x1_270-motor_x2_270)/(x_steps*((abs(motor_x2_270-motor_x1_270))))) + ' ' +  "{:.6f}".format(motor_y2_270) + ' ' + str(z_factor) + ' 270.000000' + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t270\t0' + '\t' + str(stage_rot) + '\n')
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
-                f.write(str(count) + '\t' + str(np.average([x_min,x_max])) + '\t' + str(np.average([y_min,y_max])) + '\t' + str(z_factor) + '\t0\t0' + '\t' + str(stage_rot) + '\n')
-            g.write(str(count))
+                f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
+            g.write('1 ' + "{:i}".format(count))
+            g.write('2 ' + "{:i}".format(count))
                 
 
 if __name__ == '__main__':
