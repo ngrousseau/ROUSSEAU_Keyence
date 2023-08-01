@@ -322,33 +322,7 @@ def main():
     ############################################################
     # Writing SPEC Commands to a Text File Based on User Inputs.
     ############################################################
-    
-    # Round values
-    x_min = round(x_min,2)
-    x_max = round(x_max,2)
-    y_min = round(x_min,2)
-    y_max = round(x_max,2)
-    z_min = round(z_min,2)
-    z_max = round(z_max,2)
-    phi_steps = round(phi_steps,2)
-    motor_x1_0 = round(motor_x1_0,2)
-    motor_x2_0 = round(motor_x2_0,2)
-    motor_y1_0 = round(motor_y1_0,2)
-    motor_y2_0 = round(motor_y2_0,2)
-    motor_x1_90 = round(motor_x1_90,2)
-    motor_x2_90 = round(motor_x2_90,2)
-    motor_y1_90 = round(motor_y1_90,2)
-    motor_y2_90 = round(motor_y2_90,2)
-    motor_x1_180 = round(motor_x1_180,2)
-    motor_x2_180 = round(motor_x2_180,2)
-    motor_y1_180 = round(motor_y1_180,2)
-    motor_y2_180 = round(motor_y2_180,2)
-    motor_x1_270 = round(motor_x1_270,2)
-    motor_x2_270 = round(motor_x2_270,2)
-    motor_y1_270 = round(motor_y1_270,2)
-    motor_y2_270 = round(motor_y2_270,2)
    
-    
     g = open('SPEC_SIZE.txt','w')
     
     f = open('SPEC.txt','w')
@@ -366,7 +340,7 @@ def main():
                     f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' + "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' +  str(stage_rot) + '\n')
                 count = count + 1
                 f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' +  str(stage_rot) + '\n')
-                g.write(str(count))
+                g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
             
             else:
                 # The diameter is less than 40 mm, the height is more than 40
@@ -389,7 +363,7 @@ def main():
                     else:
                         count = count + 1
                         f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
-                    g.write(str(count))
+                    g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
                 
         else:
             if height <= 40:
@@ -400,7 +374,7 @@ def main():
                     f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' ' +  "{:.6f}".format((i+1)/phi_steps) + ' ' + '1' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
                 f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
-                g.write(str(count))
+                g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
                 
             else:
                 # The diameter and height are greater than 40 mm and the shape 
@@ -423,7 +397,7 @@ def main():
                     else:
                         count = count + 1
                         f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
-                    g.write(str(count))
+                    g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
                     
     else:
         if height <= 40:
@@ -491,7 +465,7 @@ def main():
             f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')
             count = count + 1
             f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_max) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
-            g.write('1 ' + str(count))
+            g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
             
         else:
             # The height is more than 40 mm and the shape is a square.
@@ -564,8 +538,7 @@ def main():
                 f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 270.000000 0' + ' ' + str(stage_rot) + '\n')
                 count = count + 1
                 f.write(str(count) + ' ' +  "{:.6f}".format(np.average([x_min,x_max])) + ' ' +  "{:.6f}".format(np.average([y_min,y_max])) + ' ' + str(z_factor) + ' 0.000000 0' + ' ' + str(stage_rot) + '\n')
-            g.write('1 ' + "{:i}".format(count))
-            g.write('2 ' + "{:i}".format(count))
+            g.write('1 ' + str(count) + '\n' + '2 ' + str(count))
                 
 
 if __name__ == '__main__':

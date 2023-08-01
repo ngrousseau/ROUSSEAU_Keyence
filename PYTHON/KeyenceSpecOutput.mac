@@ -3,6 +3,8 @@
 ###############################
 
 global TESTROWS
+global INI2JSONPY
+global INI2JSON_COMMAND
 
 ###############################
 ###############################
@@ -41,8 +43,8 @@ def readsize '{
     size_file = sprintf("/%s/%s", CWD, size_array)
     array_read(size_file, length_array)
     
-    data_pt = size[0][0]
-    TESTROWS = size[0][1]
+    data_pt = length_array[0][0]
+    TESTROWS = length_array[1][1]
     p TESTROWS
     
 }'
@@ -96,7 +98,7 @@ def laserscan '{
     array_read(array_full, part_coord)
     
     check = 0
-    for (j = initial_pt;  j < ROWS; j++) {
+    for (j = initial_pt;  j < TESTROWS; j++) {
         data_pt = part_coord[j][0]
         labx = part_coord[j][1]
         laby = part_coord[j][2]
@@ -110,37 +112,37 @@ def laserscan '{
         
         while (check == 0) {
             if (phi == 90) {
-                mv KeyenceScan.txt KeyenceScan_0.txt
-                rm KeyenceScan.txt
+                unix(sprintf("mv KeyenceScan.txt KeyenceScan_0.txt"))
+                unix(sprintf("rm KeyenceScan.txt"))
                 check = 1
                 break
-            break
-            }    
+                }
+            break   
         }
         
         while (check == 1) {
             if (phi == 180) {
-                mv KeyenceScan.txt KeyenceScan_90.txt
-                rm KeyenceScan.txt
+                unix(sprintf("mv KeyenceScan.txt KeyenceScan_90.txt"))
+                unix(sprintf("rm KeyenceScan.txt"))
                 check = 2
                 break
-            break
-            }    
+                }
+            break   
         }
         
         while (check == 2) {
             if (phi == 270) {
-                mv KeyenceScan.txt KeyenceScan_180.txt
-                rm KeyenceScan.txt
+                unix(sprintf("mv KeyenceScan.txt KeyenceScan_180.txt"))
+                unix(sprintf("rm KeyenceScan.txt"))
                 check = 3
                 break
-            break
-            }    
+                }
+            break   
         }
         
         if (scanflag == 1) {
         INI2JSONPY = "ROUSSEAU_3DScan.py"
-        INI2JSON_COMMMAND = sprintf("/bin/python %s",  INI2JSONPY)
+        INI2JSON_COMMMAND = sprintf("*Python Directory* %s",  INI2JSONPY)
         unix(sprintf("%s", INI2JSON_COMMMAND))
         }
     }

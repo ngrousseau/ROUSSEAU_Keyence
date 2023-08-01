@@ -71,7 +71,7 @@ def main():
                 # CHANGE THIS BLOCK TO MATCH YOUR SPECIMEN PROPERTIES
                 ###############################################################
                                     
-                gauge_length = 33.5 # Specimen gauge length (mm)
+                gauge_length = 20.7 # Specimen gauge length (mm)
                 cross_section = 40.3225 # Specimen cross sectional area (mm^2)
 
                 ###############################################################
@@ -306,8 +306,8 @@ def main():
                                 
                         wire1_index = []
                         wire1_zval = []
-                        for i in range(index1-160,index1+160):
-                            if z_val_mm[i] > np.average(wire_red)*1.10:
+                        for i in range(index1-40,index1+40):
+                            if z_val_mm[i] > np.max(wire_red)*.95:
                                 wire1_index.append(i)
                                 wire1_zval.append(z_val_mm[i])
                                 
@@ -324,8 +324,8 @@ def main():
                         
                         wire2_index = []
                         wire2_zval = []
-                        for i in range(index2-160,index2+160):
-                            if z_val_mm[i] > np.average(wire_red)*1.10:
+                        for i in range(index2-40,index2+40):
+                            if z_val_mm[i] > np.max(wire_red)*.95:
                                 wire2_index.append(i)
                                 wire2_zval.append(z_val_mm[i])
                         print(np.min(wire2_zval))
