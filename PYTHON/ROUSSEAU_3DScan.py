@@ -163,7 +163,7 @@ def main():
 
             # Conver Z data to the actual length in millimeters
             if z_val[sl + i] == 0:  # invalid value
-                z_val_mm[i] = numpy.nan
+                z_val_mm[i] = -99
             else:
                 # 'Simple array data' is offset to be unsigned 16-bit data.
                 # Decode by subtracting 32768 to get a signed value.

@@ -15,7 +15,7 @@ A library of communication files and an LJXAwrap.py script file were acquired fr
 * A Keyence LJ-X8080 profiling laser was used for this project.
 * The python scripts were written to be compatible with an LJ-X8000A controller.
 * The scripts were written with Python 3.9 and compiled with Spyder.
-* Python modules used in these scripts include LJXAwrap, ctypes, sys, time, numpy, matplotlib and PySimpleGUI (install with pip and required Python 3.4+).
+* Python modules used in these scripts include numpy, math, ctypes, sys, time, matplotlib, pandas, mpl_toolkits.mplot3d, and PySimpleGUI (install with pip and required Python 3.4+).
 
 ## User Instructions
 This repository contains 3 folders which are the License folder, containing the Keyence License agreement, the images folder, which contains relevant images included in READme files and the PYTHON folder, where all the scripts and associated READme files are located.

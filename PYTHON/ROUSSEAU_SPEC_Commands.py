@@ -5,53 +5,56 @@ import math
 import numpy as np
 
 
+#####################################################
+# CHANGE THIS BLOCK TO MATCH STAGE LIMITS (FROM HERE)
+#####################################################
+
+# Motor Limits in X, Y, Z (mm)
+[x_min,x_max] = [1,149]
+[y_min,y_max] = [1,149]
+[z_min,z_max] = [0,49]
+
+# Motor steps/mm
+x_steps = 1
+y_steps = 1
+phi_steps = 1
+
+# Stage dimensions in the direction of the x and y motors (mm)
+[stage_x,stage_y] = [152.4,101.6]
+
+# Distance from the center of rotation to the laser (mm)
+center_dist = 171.45
+
+# Does the stage rotate clockwise (0) or counterclockwise (1)
+stage_rot = 0
+
+
+# WHEN THE ANGLE OF THE STAGE EQUALS 0 DEGREES
+
+# What motor moves the stage towards the laser? X (0) or Y (1)
+motor_parallel = 0
+
+# For the motor that moves the stage towards the laser, is the direction
+# towards the laser negative (0) or positive (1)
+motor_parallel_0 = 1
+
+# When orientated facing the stage from the laser, how far to the left(-)
+# or right(+) is the laser from the center of rotation (mm)
+laser_dist = -12.7 
+
+
+# WHEN THE ANGLE OF THE STAGE EQUALS 90 DEGREES
+
+# For the motor that moves the stage towards the laser, is the direction
+# towards the laser negative (0) or positive (1)
+motor_parallel_90 = 1
+
+###################################################
+# CHANGE THIS BLOCK TO MATCH STAGE LIMITS (TO HERE)
+###################################################
+
+
 def main():
-    
-    #####################################################
-    # CHANGE THIS BLOCK TO MATCH STAGE LIMITS (FROM HERE)
-    #####################################################
-    
-    # Motor Limits in X, Y, Z (mm)
-    [x_min,x_max] = [1,149]
-    [y_min,y_max] = [1,149]
-    [z_min,z_max] = [0,49]
-    
-    # Motor steps/mm
-    x_steps = 1
-    y_steps = 1
-    phi_steps = 1
-    
-    # Stage dimensions in the direction of the x and y motors (mm)
-    [stage_x,stage_y] = [150,100]
-    
-    # Distance from the center of rotation to the laser (mm)
-    center_dist = 170
-    
-    # Does the stage rotate clockwise (0) or counterclockwise (1)
-    stage_rot = 0
-    
-
-    # WHEN THE ANGLE OF THE STAGE EQUALS 0 DEGREES
-    
-    # What motor moves the stage towards the laser? X (0) or Y (1)
-    motor_parallel = 0
-    
-    # For the motor that moves the stage towards the laser, is the direction
-    # towards the laser negative (0) or positive (1)
-    motor_parallel_0 = 1
-    
-    
-
-    # WHEN THE ANGLE OF THE STAGE EQUALS 90 DEGREES
-    
-    # For the motor that moves the stage towards the laser, is the direction
-    # towards the laser negative (0) or positive (1)
-    motor_parallel_90 = 1
-    
-    ###################################################
-    # CHANGE THIS BLOCK TO MATCH STAGE LIMITS (TO HERE)
-    ###################################################
-    
     
     ######################################################################
     # General User Interface (GUI) to define basic properties of the part.
