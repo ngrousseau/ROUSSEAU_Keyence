@@ -19,6 +19,7 @@ A library of communication files and an LJXAwrap.py script file were acquired fr
 * To check the IP address and subnet mask of the cotroller unit, a Windows device with LJ-X Navigator is required. To view these: Open LJ-X NAvigator, select Configuration(C) > Device Information(D)
 * To change the IP address or subnet mask to meet specfic needs: Open LJ-X Navigator, select Configuration(C) > Device Information(D), edit as desired and select 'send setting'. This may need to be done to the subnet mask to match the subnet your motor controller operates on.
 * Remove ROUSSEAU_ from the beginning of all scripts before use.
+* The in-depth READme files for each script is located in the respective Strain, SPEC and Model folder located in the PYTHON directory.
 
 ## User Instructions
 This repository contains 3 folders which are the License folder, containing the Keyence License agreement, the images folder, which contains relevant images included in READme files and the PYTHON folder, where all the scripts and associated READme files are located. To conduct a 3D scan of a part using the python scripts follow these steps:
